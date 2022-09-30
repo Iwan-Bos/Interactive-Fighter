@@ -25,8 +25,9 @@ public class TeensyComm : MonoBehaviour
     private static int counter = 0;         // framecounter needed for calculating when to send a 'command'
 
     // List of all com ports available on the system
-    public static List<string> comPorts = new List<string>();
+    // public static List<string> comPorts = new List<string>();
     public static bool isPortActive = false;    // true = a comm port is opened
+    public TestScript testScript;
 
     void Start()
     {
@@ -53,9 +54,9 @@ public class TeensyComm : MonoBehaviour
                     try
                     {
                         incoming = serial.ReadLine();
-                        // ParseLine(incoming);
-                        Debug.Log(incoming);
-                        // SendToMannager();
+                        ParseLine(incoming);
+                        // Debug.Log(incoming);
+                        SendToMannager();
                     }
                     catch (TimeoutException)
                     {
@@ -78,11 +79,14 @@ public class TeensyComm : MonoBehaviour
             list.Add(numVal);
         }
         values = list;
+        testScript.GiveValues(values);
     }
 
     void SendToMannager()
     {
-        
+        Text[] toShow = FindObjectsOfType<Text>();
+        toShow[0].text = values[0].ToString(); //LDR value
+        toShow[1].text = values[1].ToString(); //thermo value
     }
 
     /// <summary>
