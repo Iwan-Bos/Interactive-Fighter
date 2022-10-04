@@ -4,53 +4,73 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // Movement fields
     private float horizontal;
-    private float speed = 0.8f;
-    private float jumpingPower = 16f;
     private bool facingRight = true;
+    [SerializeField] float speed = 2f;
+    [SerializeField] float jumpingPower = 4f;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] Transform groundCheck;
+    [SerializeField] LayerMask groundLayer;
 
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
+    // Attack fields
+    [SerializeField] GameObject basicAttackBox;
+
+    // method for input & other updates
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
         Jump();
+
+        BasicAttack();
         
         Flip();
     }
+    // method for physics updates
     private void FixedUpdate() 
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);    
+        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
     }
 
+
+    // preforms a basic attack
+    private void BasicAttack() 
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(basicAttack());
+        }
+
+    }
+    // jumps when on the ground
     private void Jump() {
         
-        if (Input.GetButtonDown("Jump") && Grounded())
+        if (Input.GetButton("Jump") && Grounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
-        
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-        }
     }
-
+    // checks if player is on the ground
     private bool Grounded() {
-        
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+       
+        return Physics.CheckSphere(groundCheck.position, 0.2f, groundLayer);
     }
-
+    // flips character around based on direction held
     private void Flip() {
-
         // Holding right while facing left flips character around, same with holding left while facing right.
-        if (facingRight && horizontal < 0f || !facingRight && horizontal > 0f)
+        if (horizontal < 0f && facingRight || !facingRight && horizontal > 0f)
         {
             facingRight = !facingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
+            transform.Rotate(0f, 180f, 0f);
         }
+    }
+
+    // basic attack timing
+    private IEnumerator basicAttack() {
+        
+        basicAttackBox.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.2f);
+        basicAttackBox.SetActive(false);
     }
 }
