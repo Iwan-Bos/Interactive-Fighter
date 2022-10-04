@@ -84,9 +84,11 @@ public class TeensyComm : MonoBehaviour
 
     void SendToMannager()
     {
-        Text[] toShow = FindObjectsOfType<Text>();
-        toShow[0].text = values[0].ToString(); //LDR value
-        toShow[1].text = values[1].ToString(); //thermo value
+        // Text LDR = FindObjectsOfType<Text>()[0];
+        // Text thermo = FindObjectsOfType<Text>()[1];
+
+        // LDR.text = values[0].ToString(); //LDR value
+        // thermo.text = values[1].ToString(); //thermo value
     }
 
     /// <summary>
