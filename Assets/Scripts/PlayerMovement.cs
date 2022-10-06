@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UIElements;
 public class PlayerMovement : MonoBehaviour
 {
     // # FIELDS #
@@ -16,11 +16,11 @@ public class PlayerMovement : MonoBehaviour
  
 
     // Stats
-    [SerializeField] int health;
-    
+    [SerializeField] int health;    
 
     // Scripts
     public Collide collide;
+    public Healthbar healthbar;
 
 
 
@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
         Flip();
     }
-    
+
     // FIXEDUPDATE, RIGIDBODY LOOP
     private void FixedUpdate()
     {
@@ -48,6 +48,9 @@ public class PlayerMovement : MonoBehaviour
     {
         // reduce health by 1
         health--;
+
+        // update health bar value
+        healthbar.UpdateHealth(health);
 
         // death check
         if (health <= 0)

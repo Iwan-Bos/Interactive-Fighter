@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class Collide : MonoBehaviour
 {
+    // # FIELDS #
     [SerializeField] LayerMask enemyLayer;
+    
+
+
+    // # METHODS #
+    // attack hibox using OverlapBox(), returns all hit colliders 
     public Collider[] OverlapBox()
     {
         //Use the OverlapBox to detect if there are any other colliders within this box area.
@@ -12,5 +18,15 @@ public class Collide : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position, transform.localScale / 2, Quaternion.identity, enemyLayer);
 
         return hitColliders;
+    }
+
+     //Draw the Box Overlap as a gizmo to show where it currently is testing.
+    void OnDrawGizmos()
+    {
+        // set box color
+        Gizmos.color = Color.red;
+        
+        //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
+        Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
 }
