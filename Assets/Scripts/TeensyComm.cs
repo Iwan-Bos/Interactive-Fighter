@@ -73,9 +73,14 @@ public class TeensyComm : MonoBehaviour
     {
         string[] svalues = strIn.Split(',');
         List<int> list = new List<int>();
-        foreach (string svalue in svalues)
+        for (int i = 0; i < 2; i++)
         {
-            int numVal = Convert.ToInt32(svalue);
+            int numVal = Convert.ToInt32(svalues[i]);
+            list.Add(numVal);
+        }
+        for (int i = 2; i < 4; i++)
+        {
+            int numVal = Convert.ToInt32(svalues[i], 2);
             list.Add(numVal);
         }
         values = list;
