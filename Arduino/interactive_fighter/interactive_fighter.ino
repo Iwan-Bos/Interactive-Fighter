@@ -42,6 +42,6 @@ void loop() {
     toSend += reed2Value;
 
     Serial.println(toSend);
-//    delay(10);
   }
+    delay(10);
 }

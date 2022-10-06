@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] int health;
-    [SerializeField] int contactDamage;
+    public int contactDamage;
     [SerializeField] ParticleSystem HitParticles;
     [SerializeField] ParticleSystem DeathParticles;
 

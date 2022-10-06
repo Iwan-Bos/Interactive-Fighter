@@ -6,18 +6,28 @@ using UnityEngine.UI;
 
 public class TestScript : MonoBehaviour
 {
+    //value fields
     private int LDR;
     private int therm;
     private int movePlates;
     private int attackVal;
-    private bool mayJump;
+
+    //display fields
     public Image showLight;
     public Slider heatSlider;
+    public Slider attackSlider;
     public List<Image> directions;
     public List<Image> attacks;
     private Text LDRtext;
     private Text ThermText;
+
+    //movement fields
     private float timer;
+    private bool mayJump;
+
+    //attack fields
+    private float attackTimer;
+    private bool attacked;
 
     void Start()
     {
@@ -75,7 +85,7 @@ public class TestScript : MonoBehaviour
                 if(mayJump && timer < 0.5f)
                 {
                     //jump
-                    Debug.Log("jump!");
+                    FindObjectOfType<playerTest>().Jump();
                     mayJump = false;
                 }
                 break;
@@ -91,6 +101,14 @@ public class TestScript : MonoBehaviour
                 attacks[1].color = Color.green;
                 attacks[2].color = Color.white;
                 attacks[3].color = Color.white;
+                attackSlider.gameObject.SetActive(true);
+                attackSlider.value = attackTimer * 4;
+                //delay 0.5 seconds
+                if (attackTimer > 0.5 && !attacked)
+                {
+                    FindObjectOfType<playerTest>().BasicAttack();
+                    attacked = true;
+                }
                 break;
             }
             case 2:
@@ -99,6 +117,15 @@ public class TestScript : MonoBehaviour
                 attacks[1].color = Color.white;
                 attacks[2].color = Color.green;
                 attacks[3].color = Color.white;
+                attackSlider.gameObject.SetActive(true);
+                attackSlider.value = attackTimer;
+                //delay 0.5 seconds
+                if (attackTimer > 2 && !attacked)
+                {
+                    FindObjectOfType<playerTest>().BasicAttack();
+                    attacked = true;
+                }
+                //delay 2 seconds
                 break;
             }
             case 3:
@@ -115,9 +142,14 @@ public class TestScript : MonoBehaviour
                 attacks[1].color = Color.white;
                 attacks[2].color = Color.white;
                 attacks[3].color = Color.white;
+                attackTimer = 0;
+                attacked = false;
+                attackSlider.value = 0;
+                attackSlider.gameObject.SetActive(false);
                 break;
             }
         }
+        attackTimer += Time.deltaTime;
     }
 
     public void GiveValues(List<int> values)
