@@ -56,7 +56,6 @@ public class TeensyComm : MonoBehaviour
                         incoming = serial.ReadLine();
                         ParseLine(incoming);
                         // Debug.Log(incoming);
-                        SendToMannager();
                     }
                     catch (TimeoutException)
                     {
@@ -85,15 +84,6 @@ public class TeensyComm : MonoBehaviour
         }
         values = list;
         testScript.GiveValues(values);
-    }
-
-    void SendToMannager()
-    {
-        // Text LDR = FindObjectsOfType<Text>()[0];
-        // Text thermo = FindObjectsOfType<Text>()[1];
-
-        // LDR.text = values[0].ToString(); //LDR value
-        // thermo.text = values[1].ToString(); //thermo value
     }
 
     /// <summary>

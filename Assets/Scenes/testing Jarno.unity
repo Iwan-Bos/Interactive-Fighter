@@ -636,7 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
-  contactDamage: 0
+  contactDamage: 3
   HitParticles: {fileID: 0}
   DeathParticles: {fileID: 0}
 --- !u!65 &399749975
@@ -2142,7 +2142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
-  contactDamage: 0
+  contactDamage: 1
   HitParticles: {fileID: 0}
   DeathParticles: {fileID: 0}
 --- !u!65 &1743019930

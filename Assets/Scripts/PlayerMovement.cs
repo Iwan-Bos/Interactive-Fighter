@@ -30,11 +30,9 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        MoveHorizontal();
+        // Jump();
 
-        Jump();
-
-        BasicAttack();
+        // BasicAttack();
 
         Flip();
     }
@@ -49,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other) 
     {
         // reduce health by 1
-        health--;
+        health -= other.GetComponent<Enemy>().contactDamage;
 
         // update health bar value
         healthbar.UpdateHealth(health);
@@ -75,39 +73,63 @@ public class PlayerMovement : MonoBehaviour
 
 
 
+
     // # METHODS #
     // preforms a basic attack
-    private void BasicAttack()
+    public void BasicAttack()
     {
-        // on click
-        if (Input.GetMouseButtonDown(0))
-        {
-            // check what is in the hitbox
-           Collider[] hitColliders = collide.OverlapBox();
+        Debug.Log("attack!");
+        // check what is in the hitbox
+        Collider[] hitColliders = collide.OverlapBox();
 
-            // reset i
-            int i = 0;
+        // reset i
+        int i = 0;
         
-            // check when there is a new collider coming into contact with the box
-            while (i < hitColliders.Length)
+        // check when there is a new collider coming into contact with the box
+        while (i < hitColliders.Length)
+        {
+            // log gameObject of hit collider
+            Debug.Log(hitColliders[i].gameObject);
+
+            // call Hit() of the hit collider to change hit enemies' values
+            hitColliders[i].gameObject.GetComponent<Enemy>().Hit();
+
+            // increment i
+            i++;
+        }
+    }
+
+    // move to the right and left from teensy
+    public void move(string direction)
+    {
+        if (direction == "left")
+        {
+            // Debug.Log(this.gameObject.transform.position.x);
+            this.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+            if (facingRight)
             {
-                // log gameObject of hit collider
-                Debug.Log(hitColliders[i].gameObject);
-
-                // call Hit() of the hit collider to change hit enemies' values
-                hitColliders[i].gameObject.GetComponent<Enemy>().Hit();
-
-                // increment i
-                i++;
+                transform.Rotate(0f, 180f, 0f);
+                facingRight = false;
+            }
+        }
+        else if (direction == "right")
+        {
+            // Debug.Log(this.gameObject.transform.position.x);
+            this.gameObject.transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+            if (!facingRight)
+            {
+                transform.Rotate(0f, 180f, 0f);
+                facingRight = true;
             }
         }
     }
-   // jumps when on the ground
-    private void Jump()
+
+    // jumps when on the ground
+    public void Jump()
     {
-        if (Input.GetButton("Jump") && Grounded())
+        if (Grounded())
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);    
         }
     }
     // checks if player is on the ground

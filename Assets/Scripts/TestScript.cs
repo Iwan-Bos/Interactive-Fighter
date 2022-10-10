@@ -62,12 +62,14 @@ public class TestScript : MonoBehaviour
             {
                 directions[1].color = Color.green;
                 directions[0].color = Color.white;
+                FindObjectOfType<playerTest>().move("right");
                 break;
             }
             case 2:
             {
                 directions[0].color = Color.green;
                 directions[1].color = Color.white;
+                FindObjectOfType<playerTest>().move("left");
                 break;
             }
             case 3:
@@ -101,8 +103,11 @@ public class TestScript : MonoBehaviour
                 attacks[1].color = Color.green;
                 attacks[2].color = Color.white;
                 attacks[3].color = Color.white;
-                attackSlider.gameObject.SetActive(true);
-                attackSlider.value = attackTimer * 4;
+                if (!attacked)
+                {
+                    attackSlider.gameObject.SetActive(true);
+                    attackSlider.value = attackTimer * 4;
+                }
                 //delay 0.5 seconds
                 if (attackTimer > 0.5 && !attacked)
                 {
@@ -117,15 +122,17 @@ public class TestScript : MonoBehaviour
                 attacks[1].color = Color.white;
                 attacks[2].color = Color.green;
                 attacks[3].color = Color.white;
-                attackSlider.gameObject.SetActive(true);
-                attackSlider.value = attackTimer;
-                //delay 0.5 seconds
+                if (!attacked)
+                {
+                    attackSlider.gameObject.SetActive(true);
+                    attackSlider.value = attackTimer;
+                }
+                //delay 2 seconds
                 if (attackTimer > 2 && !attacked)
                 {
                     FindObjectOfType<playerTest>().BasicAttack();
                     attacked = true;
                 }
-                //delay 2 seconds
                 break;
             }
             case 3:
@@ -134,6 +141,14 @@ public class TestScript : MonoBehaviour
                 attacks[1].color = Color.white;
                 attacks[2].color = Color.white;
                 attacks[3].color = Color.green;
+                //open pausemenu
+                //implementation
+
+                //reset attack values
+                attackSlider.gameObject.SetActive(false);
+                attackTimer = 0f;
+                attacked = true;
+
                 break;
             }
             default:
