@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
+        MoveHorizontal();
+
         Jump();
 
         BasicAttack();
@@ -100,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-    // jumps when on the ground
+   // jumps when on the ground
     private void Jump()
     {
         if (Input.GetButton("Jump") && Grounded())
