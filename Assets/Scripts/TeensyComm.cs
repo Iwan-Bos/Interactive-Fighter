@@ -27,7 +27,7 @@ public class TeensyComm : MonoBehaviour
     // List of all com ports available on the system
     // public static List<string> comPorts = new List<string>();
     public static bool isPortActive = false;    // true = a comm port is opened
-    public TestScript testScript;
+    public TeensyWorker valueSend;
 
     void Start()
     {
@@ -83,7 +83,7 @@ public class TeensyComm : MonoBehaviour
             list.Add(numVal);
         }
         values = list;
-        testScript.GiveValues(values);
+        valueSend.GiveValues(values);
     }
 
     /// <summary>
