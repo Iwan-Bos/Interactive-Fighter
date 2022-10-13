@@ -445,10 +445,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13abdd35dffc9ee4386ce8a462fd55fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 5
-  contactDamage: 0
   HitParticles: {fileID: 0}
   DeathParticles: {fileID: 0}
+  contactDamage: 1
 --- !u!1 &447948889
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,10 +762,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13abdd35dffc9ee4386ce8a462fd55fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 5
-  contactDamage: 0
   HitParticles: {fileID: 0}
   DeathParticles: {fileID: 0}
+  contactDamage: 2
 --- !u!65 &718454078
 BoxCollider:
   m_ObjectHideFlags: 0

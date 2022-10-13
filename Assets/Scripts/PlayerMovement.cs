@@ -47,8 +47,8 @@ public class PlayerMovement : MonoBehaviour
     // ONTRIGGERENTER, CALLED WHEN ENTERING ANOTHER COLLIDER
     private void OnTriggerEnter(Collider other)
     {
-        // check if it it's trigger
-        if (other.isTrigger)
+        // check if it is not an Enemy
+        if (other.gameObject.layer != 8 /* 8 = enemy layer*/)
         {
             // check the type & do what the trigger should do
             switch (other.gameObject.GetComponent<EnvironmentTrigger>().triggerType)
@@ -65,11 +65,11 @@ public class PlayerMovement : MonoBehaviour
 
                 // If you get here something's gone wrong
                 default:
-                    // nothing
+                    Debug.Log("Something's gone wrong");
                 break;
             }
-        }/*
-        else // anything other than a trigger is an enemy (for now)
+        }
+        else // anything other than an EnviromentTrigger is an enemy (for now)
         {
             // reduce health by 1
             health -= other.GetComponent<Enemy>().contactDamage;
@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
 
             // TODO: 
             // get launched in the opposite direction
-        }*/
+        }
     }
 
     public void takeDamage(int amount)
