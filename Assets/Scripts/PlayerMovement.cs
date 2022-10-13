@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     // Scripts
     public Collide collide;
     public Healthbar healthbar;
+    public EnvironmentTrigger environmentTrigger;
 
 
 
@@ -44,24 +45,47 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // ONTRIGGERENTER, CALLED WHEN ENTERING ANOTHER COLLIDER
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other)
     {
-        // reduce health by 1
-        health -= other.GetComponent<Enemy>().contactDamage;
-
-        // update health bar value
-        healthbar.UpdateHealth(health);
-
-        // death check
-        if (health <= 0)
+        // check if it it's trigger
+        if (other.isTrigger)
         {
-            EndGame();
+            // check the type & do what the trigger should do
+            switch (other.gameObject.GetComponent<EnvironmentTrigger>().triggerType)
+            {
+                // Darkness trigger
+                case 0:
+                    environmentTrigger.AddDarkness();
+                break;
+
+                // Coldness trigger
+                case 1:
+                    environmentTrigger.AddColdness();
+                break;
+
+                // If you get here something's gone wrong
+                default:
+                    // nothing
+                break;
+            }
         }
+        else // anything other than a trigger is an enemy (for now)
+        {
+            // reduce health by 1
+            health -= other.GetComponent<Enemy>().contactDamage;
 
-        // get launched in the opposite direction
+            // update health bar value
+            healthbar.UpdateHealth(health);
 
-        // log health
-        Debug.Log(this.health);
+            // death check
+            if (health <= 0)
+            {
+                EndGame();
+            }
+
+            // TODO: 
+            // get launched in the opposite direction
+        }
     }
 
     // ENDGAME, CALLED WHEN PLAYER DIES
@@ -69,6 +93,9 @@ public class PlayerMovement : MonoBehaviour
     {
         // exit play mode
         UnityEditor.EditorApplication.isPlaying = false;
+
+        // TODO:
+        // switch to endscreen
     }
 
 

@@ -6,6 +6,7 @@ public class Collide : MonoBehaviour
 {
     // # FIELDS #
     [SerializeField] LayerMask enemyLayer;
+    [SerializeField] Color color = Color.red;
     
 
 
@@ -20,11 +21,11 @@ public class Collide : MonoBehaviour
         return hitColliders;
     }
 
-     //Draw the Box Overlap as a gizmo to show where it currently is testing.
+    //Draw the Box Overlap as a gizmo to show where it currently is testing.
     void OnDrawGizmos()
     {
         // set box color
-        Gizmos.color = Color.red;
+        Gizmos.color = color;
         
         //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
         Gizmos.DrawWireCube(transform.position, transform.localScale);
