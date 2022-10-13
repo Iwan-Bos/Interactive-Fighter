@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
                     // nothing
                 break;
             }
-        }
+        }/*
         else // anything other than a trigger is an enemy (for now)
         {
             // reduce health by 1
@@ -85,7 +85,21 @@ public class PlayerMovement : MonoBehaviour
 
             // TODO: 
             // get launched in the opposite direction
+        }*/
+    }
+
+    public void takeDamage(int amount)
+    {
+        //reduce health
+        health -= amount;
+
+        //check if alive
+        if (health <= 0)
+        {
+            EndGame();
         }
+
+        //other stuff
     }
 
     // ENDGAME, CALLED WHEN PLAYER DIES

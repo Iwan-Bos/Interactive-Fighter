@@ -13,13 +13,7 @@ public class TeensyWorker : MonoBehaviour
     private int attackVal;
 
     //display fields
-    // public Image showLight;
-    // public Slider heatSlider;
     public Slider attackSlider;
-    // public List<Image> directions;
-    // public List<Image> attacks;
-    // private Text LDRtext;
-    // private Text ThermText;
 
     //movement fields
     private float timer;
@@ -34,8 +28,6 @@ public class TeensyWorker : MonoBehaviour
 
     void Start()
     {
-        // LDRtext = FindObjectsOfType<Text>()[0];
-        // ThermText = FindObjectsOfType<Text>()[1];
         player = FindObjectOfType<PlayerMovement>();
         timer = 1;
     }
@@ -43,51 +35,33 @@ public class TeensyWorker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // LDRtext.text = LDR.ToString();
-        // ThermText.text = therm.ToString();
+        //analoge metingen//
+        //LDR
 
+        //Thermo
 
-        //analoge metingen
-        // if (LDR > 600)
-        // {
-        //     showLight.color = new Color32(200, 200, 70, 255);
-        // }
-        // else
-        // {
-        //     showLight.color = new Color32(0, 0, 0, 255);
-        // }
-        // heatSlider.value = therm;
-
-        //digitale metingen
+        //digitale metingen//
         //voetplaten
         switch (movePlates)
         {
             case 1:
             {
-                // directions[1].color = Color.green;
-                // directions[0].color = Color.white;
                 player.move("right");
                 break;
             }
             case 2:
             {
-                // directions[0].color = Color.green;
-                // directions[1].color = Color.white;
                 player.move("left");
                 break;
             }
             case 3:
             {
-                // directions[0].color = Color.red;
-                // directions[1].color = Color.red;
                 mayJump = true;
                 timer = 0;
                 break;
             }
             default:
             {
-                // directions[0].color = Color.white;
-                // directions[1].color = Color.white;
                 if(mayJump && timer < 0.5f)
                 {
                     //jump
@@ -103,10 +77,6 @@ public class TeensyWorker : MonoBehaviour
         {
             case 1:
             {
-                // attacks[0].color = Color.white;
-                // attacks[1].color = Color.green;
-                // attacks[2].color = Color.white;
-                // attacks[3].color = Color.white;
                 if (!attacked)
                 {
                     attackSlider.gameObject.SetActive(true);
@@ -122,10 +92,6 @@ public class TeensyWorker : MonoBehaviour
             }
             case 2:
             {
-                // attacks[0].color = Color.white;
-                // attacks[1].color = Color.white;
-                // attacks[2].color = Color.green;
-                // attacks[3].color = Color.white;
                 if (!attacked)
                 {
                     attackSlider.gameObject.SetActive(true);
@@ -141,26 +107,18 @@ public class TeensyWorker : MonoBehaviour
             }
             case 3:
             {
-                // attacks[0].color = Color.white;
-                // attacks[1].color = Color.white;
-                // attacks[2].color = Color.white;
-                // attacks[3].color = Color.green;
-                //open pausemenu
-                //implementation
-
                 //reset attack values
                 attackSlider.gameObject.SetActive(false);
                 attackTimer = 0f;
                 attacked = true;
 
+                //open pausemenu
+                //implementation
+
                 break;
             }
             default:
             {
-                // attacks[0].color = Color.green;
-                // attacks[1].color = Color.white;
-                // attacks[2].color = Color.white;
-                // attacks[3].color = Color.white;
                 attackTimer = 0;
                 attacked = false;
                 attackSlider.value = 0;
