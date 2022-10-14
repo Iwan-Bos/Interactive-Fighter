@@ -20,13 +20,4 @@ public class EnvironmentTrigger : MonoBehaviour
         //Draw a cube where the Trigger is
         Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
-
-    public void AddDarkness()
-    {
-        
-    }
-    public void AddColdness()
-    {
-
-    }
 }

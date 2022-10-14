@@ -27,13 +27,13 @@ public class SmoothCamera : MonoBehaviour
     // Update, called once a frame
     void Update ()
     {
-        a();
+        MoveCamera();
     }
 
 
 
     //### METHODS ###
-    private void a()
+    private void MoveCamera()
     {
         if (target)
         {

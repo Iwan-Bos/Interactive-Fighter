@@ -21,12 +21,13 @@ public class PlayerMovement : MonoBehaviour
     // Scripts
     public Collide collide;
     public Healthbar healthbar;
+    public PostProcessingControl postProcessingControl;
     public EnvironmentTrigger environmentTrigger;
 
 
 
     // # MAIN #
-    // UPDATE, MAIN LOOP
+    // loop for misc
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -38,13 +39,13 @@ public class PlayerMovement : MonoBehaviour
         Flip();
     }
 
-    // FIXEDUPDATE, RIGIDBODY LOOP
+    // loop for rigid bodies
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
     }
 
-    // ONTRIGGERENTER, CALLED WHEN ENTERING ANOTHER COLLIDER
+    // Called when entering a trigger
     private void OnTriggerEnter(Collider other)
     {
         // check if it is not an Enemy
@@ -53,14 +54,14 @@ public class PlayerMovement : MonoBehaviour
             // check the type & do what the trigger should do
             switch (other.gameObject.GetComponent<EnvironmentTrigger>().triggerType)
             {
-                // Darkness trigger
-                case 0:
-                    environmentTrigger.AddDarkness();
+                case 0: // Darkness trigger
+                    // set darkness
+                    postProcessingControl.AddDarkness();
                 break;
-
-                // Coldness trigger
-                case 1:
-                    environmentTrigger.AddColdness();
+   
+                case 1: // Coldness trigger
+                    // set coldness
+                    postProcessingControl.AddColdness();
                 break;
 
                 // If you get here something's gone wrong
@@ -88,21 +89,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void takeDamage(int amount)
+    // Called when leaving a trigger
+    private void OnTriggerExit(Collider other) 
     {
-        //reduce health
-        health -= amount;
-
-        //check if alive
-        if (health <= 0)
+        // check if it is not an Enemy
+        if (other.gameObject.layer != 8 /* 8 = enemy layer*/)
         {
-            EndGame();
+            // check the type & do what the trigger should do
+            switch (other.gameObject.GetComponent<EnvironmentTrigger>().triggerType)
+            {
+                case 0: // Darkness trigger
+                    // remove darkness
+                    postProcessingControl.RemoveDarkness();
+                break;
+   
+                case 1: // Coldness trigger
+                    // remove coldness
+                    postProcessingControl.RemoveColdness();
+                break;
+
+                // If you get here something's gone wrong
+                default:
+                    Debug.Log("Something's gone wrong");
+                break;
+            }
         }
-
-        //other stuff
     }
-
-    // ENDGAME, CALLED WHEN PLAYER DIES
+    // Called when player dies
     private void EndGame() 
     {
         // exit play mode
@@ -111,7 +124,6 @@ public class PlayerMovement : MonoBehaviour
         // TODO:
         // switch to endscreen
     }
-
 
 
 
@@ -139,7 +151,6 @@ public class PlayerMovement : MonoBehaviour
             i++;
         }
     }
-
     // move to the right and left from teensy
     public void move(string direction)
     {
@@ -164,7 +175,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
     // jumps when on the ground
     public void Jump()
     {
@@ -187,5 +197,19 @@ public class PlayerMovement : MonoBehaviour
             facingRight = !facingRight;
             transform.Rotate(0f, 180f, 0f);
         }
+    }
+    // take damage
+    public void takeDamage(int amount)
+    {
+        //reduce health
+        health -= amount;
+
+        //check if alive
+        if (health <= 0)
+        {
+            EndGame();
+        }
+
+        //other stuff
     }
 }
