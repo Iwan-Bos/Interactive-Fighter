@@ -9,7 +9,7 @@ public class Snake : Enemy
     {
         health = 5;
         contactDamage = 2;
-        speed = 3;
+        speed = 2.7f;
         lookDistance = 15;
     }
 

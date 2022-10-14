@@ -8,9 +8,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] ParticleSystem HitParticles;
     [SerializeField] ParticleSystem DeathParticles;
     public int contactDamage;
-    protected int speed;
+    protected float speed;
     protected int lookDistance;
     private GameObject Player;
+    private protected float playerTimeout;
     
     public virtual void Start()
     {
@@ -32,23 +33,46 @@ public class Enemy : MonoBehaviour
 
     public virtual bool CheckDistance()
     {
-        if (this.gameObject.transform.position.x - FindObjectOfType<PlayerMovement>().gameObject.transform.position.x <= lookDistance)
+        playerTimeout += Time.deltaTime;
+        float distance = this.gameObject.transform.position.x - FindObjectOfType<PlayerMovement>().gameObject.transform.position.x;
+        if (distance <= lookDistance && distance >= -lookDistance)
         {
             return true;
         }
-        return false;
+        else
+        {
+            playerTimeout = 2;
+            return false;
+        }
     }
 
     public virtual void MoveToPlayer()
     {
         float whichWay = FindObjectOfType<PlayerMovement>().gameObject.transform.position.x - this.gameObject.transform.position.x;
-        if (whichWay < 0)
+        if (whichWay < -0.1 && playerTimeout > 1.5f)
         {
             this.gameObject.transform.position -= new Vector3(speed * Time.deltaTime, 0, 0);
         }
-        else if (whichWay > 0)
+        else if (whichWay > 0.1 && playerTimeout > 1.5f)
         {
             this.gameObject.transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+        }
+        else if (playerTimeout > 1.5f)
+        {
+            playerTimeout = 0;
+        }
+    }
+    public virtual void FlyToPlayer()
+    {
+        Vector3 whichWay = FindObjectOfType<PlayerMovement>().gameObject.transform.position - this.gameObject.transform.position;
+        if ((whichWay.x < -0.1 || whichWay.x > 0.1) && playerTimeout > 1.5f)
+        {
+            Vector3 movement = Vector3.Normalize(whichWay);
+            this.gameObject.transform.position += movement * Time.deltaTime * speed;
+        }
+        else if (playerTimeout > 1.5f)
+        {
+            playerTimeout = 0;
         }
     }
 
