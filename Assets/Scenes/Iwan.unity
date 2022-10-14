@@ -1097,9 +1097,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volume: {fileID: 1131282535}
-  vigTarget: 0.5
-  Dspeed: 0.5
-  v4_Dspeed: {x: 0, y: 0, z: 0, w: 0.96}
+  vigStart: 0.2
+  vigEnd: 0.5
+  gainStart: 0
+  gainEnd: -0.98
+  darkDuration: 3
 --- !u!1 &1264148975
 GameObject:
   m_ObjectHideFlags: 0

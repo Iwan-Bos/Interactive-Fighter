@@ -8,60 +8,61 @@ public class PostProcessingControl : MonoBehaviour
 {
 
     // ### FIELDS ###
-    public Volume volume;
-    
-    // vignette
-    [SerializeField] float vigTarget = 0.5f;
 
-    // darknessSpeed
-    [SerializeField] float Dspeed = 0.5f;
-    [SerializeField] Vector4 v4_Dspeed = new Vector4(0f, 0f, 0f, 0.96f);
+    public Volume volume;
+    Vignette vignette;
+    LiftGammaGain liftGammaGain;
 
     // bools
     bool darknessActive = false;
     bool coldnessActive = false;
+    bool flashlight = false;
     
+
+    [SerializeField] float vigStart;
+    [SerializeField] float vigEnd;
+    [SerializeField] float gainStart;
+    [SerializeField] float gainEnd;
+
+    [SerializeField] float darkDuration;
     
+    private float darkTimer;
     
+
+
     // ### MAIN METHODS ###
     private void Update() 
     {
         DarkEffects();
     }
+        
+    
 
+    
 
 
     // ### METHODS ###
+    
     // add & remove effects when stepping in and out of darkness trigger
-    public void DarkEffects() {
-
-        // if effects exist, output them to variables
+    private void DarkEffects() 
+    {
         if (volume.profile.TryGet<Vignette>(out Vignette vignette) && 
             volume.profile.TryGet<LiftGammaGain>(out LiftGammaGain liftGammaGain))
         {
-            // if inside darkness trigger
-            // + vignette not at target value yet
-            if (darknessActive && vignette.intensity.value < vigTarget)
+            // when inside trigger: Slide %vigStart% to %vigEnd%
+            if (darknessActive && darkTimer < 1f)
             {
-                // add vignette
-                vignette.intensity.value += Dspeed * Time.deltaTime;
-
-                // reduce gain
-                liftGammaGain.gain.value -= v4_Dspeed * Time.deltaTime;
+                vignette.intensity.value = Mathf.Lerp(vigStart, vigEnd, darkTimer);
+                liftGammaGain.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(gainStart, gainEnd, darkTimer));
+                darkTimer += Time.deltaTime / darkDuration;
             }
-            
-            // if outside darkness trigger
-            if (!darknessActive)
-            {
-                // reduce effects until at normal value
-                if (vignette.intensity.value > 0f)
-                {
-                    // reduce vignette
-                    vignette.intensity.value -= Dspeed * Time.deltaTime;
 
-                    // add gain
-                    liftGammaGain.gain.value += v4_Dspeed * Time.deltaTime;
-                }
+            // when outside trigger: do the opposite
+            else if (!darknessActive && darkTimer > 0f)
+            {
+                vignette.intensity.value = Mathf.Lerp(vigStart, vigEnd, darkTimer);
+                liftGammaGain.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(gainStart, gainEnd, darkTimer));
+                darkTimer -= Time.deltaTime / darkDuration;
             }
         }
     }
@@ -69,35 +70,6 @@ public class PostProcessingControl : MonoBehaviour
     // add & remove effects when stepping in and out of coldness trigger
     public void ColdEffects() {
 
-        // if effects exist, output them to variables
-        if (volume.profile.TryGet<Vignette>(out Vignette vignette) && 
-            volume.profile.TryGet<LiftGammaGain>(out LiftGammaGain liftGammaGain))
-        {
-            // if inside coldness trigger
-            // + vignette not at target value yet
-            if (coldnessActive /*&& vignette.intensity.value < vigTarget*/)
-            {
-                // // add vignette
-                // vignette.intensity.value += speed * Time.deltaTime;
-
-                // // reduce gain
-                // liftGammaGain.gain.value -= v4_speed * Time.deltaTime;
-            }
-            
-            // if outside coldness trigger
-            if (!coldnessActive)
-            {
-                // // reduce effects until at normal value
-                // if (vignette.intensity.value > 0f)
-                // {
-                //     // reduce vignette
-                //     vignette.intensity.value -= speed * Time.deltaTime;
-
-                //     // add gain
-                //     liftGammaGain.gain.value += v4_speed * Time.deltaTime;
-                // }
-            }
-        }
     }
     
     // enables darkness
@@ -117,5 +89,4 @@ public class PostProcessingControl : MonoBehaviour
     public void RemoveColdness() {
         darknessActive = false;
     }
-
 }
