@@ -1097,11 +1097,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volume: {fileID: 1131282535}
-  vigStart: 0.2
-  vigEnd: 0.5
-  gainStart: 0
-  gainEnd: -0.98
-  darkDuration: 3
+  vignette: {fileID: 0}
+  liftGammaGain: {fileID: 0}
+  flashlight: 0
+  xDxF: 1
+  DF: 0
+  DxF: 0
+  xDF: 0
+  slideDuration: 1
 --- !u!1 &1264148975
 GameObject:
   m_ObjectHideFlags: 0
