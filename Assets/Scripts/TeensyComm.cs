@@ -71,6 +71,7 @@ public class TeensyComm : MonoBehaviour
     void ParseLine(string strIn)
     {
         string[] svalues = strIn.Split(',');
+        string padVal = "";
         List<int> list = new List<int>();
         for (int i = 0; i < 2; i++)
         {
@@ -79,9 +80,18 @@ public class TeensyComm : MonoBehaviour
         }
         for (int i = 2; i < 4; i++)
         {
-            int numVal = Convert.ToInt32(svalues[i], 2);
-            list.Add(numVal);
+            int numVal = Convert.ToInt32(svalues[i]);
+            if (numVal >= 3000)
+            {
+                padVal += "1";
+            }
+            else
+            {
+                padVal += "0";
+            }
         }
+        list.Add(Convert.ToInt32(padVal,2));
+        list.Add(Convert.ToInt32(svalues[4],2));
         values = list;
         valueSend.GiveValues(values);
     }

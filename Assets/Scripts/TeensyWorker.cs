@@ -56,12 +56,14 @@ public class TeensyWorker : MonoBehaviour
             }
             case 3:
             {
+                player.move("");
                 mayJump = true;
                 timer = 0;
                 break;
             }
             default:
             {
+                player.move("");
                 if(mayJump && timer < 0.5f)
                 {
                     //jump

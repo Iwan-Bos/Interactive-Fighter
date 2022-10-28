@@ -30,13 +30,19 @@ public class PlayerMovement : MonoBehaviour
     // loop for misc
     void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        // horizontal = Input.GetAxisRaw("Horizontal"); // movement for keyboard
+        // Debug.Log(horizontal);
 
         // Jump();
 
         // BasicAttack();
 
         Flip();
+
+        if (this.gameObject.transform.position.y <= -1)
+        {
+            EndGame();
+        }
     }
 
     // loop for rigid bodies
@@ -70,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
             }
         }
-        else // anything other than an EnviromentTrigger is an enemy (for now)
+        /*else // anything other than an EnviromentTrigger is an enemy (for now)
         {
             // reduce health by 1
             health -= other.GetComponent<Enemy>().contactDamage;
@@ -86,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
 
             // TODO: 
             // get launched in the opposite direction
-        }
+        }*/
     }
 
     // Called when leaving a trigger
@@ -120,6 +126,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // exit play mode
         UnityEditor.EditorApplication.isPlaying = false;
+        // UnityEditor.EditorApplication.isPaused = true;
 
         // TODO:
         // switch to endscreen
@@ -157,7 +164,8 @@ public class PlayerMovement : MonoBehaviour
         if (direction == "left")
         {
             // Debug.Log(this.gameObject.transform.position.x);
-            this.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+            // this.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
+            horizontal = -1;
             if (facingRight)
             {
                 transform.Rotate(0f, 180f, 0f);
@@ -167,12 +175,17 @@ public class PlayerMovement : MonoBehaviour
         else if (direction == "right")
         {
             // Debug.Log(this.gameObject.transform.position.x);
-            this.gameObject.transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+            // this.gameObject.transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
+            horizontal = 1;
             if (!facingRight)
             {
                 transform.Rotate(0f, 180f, 0f);
                 facingRight = true;
             }
+        }
+        else
+        {
+            horizontal = 0;
         }
     }
     // jumps when on the ground
@@ -204,6 +217,9 @@ public class PlayerMovement : MonoBehaviour
         //reduce health
         health -= amount;
 
+        // update health bar value
+        healthbar.UpdateHealth(health);
+        
         //check if alive
         if (health <= 0)
         {

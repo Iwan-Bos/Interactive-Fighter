@@ -2,17 +2,20 @@
 const int LDR = A0;
 const int thermo = A1;
 
+const int leftPad = A2;
+const int rightPad = A3;
+
 //digital inputs
-const int leftPad = 0;
-const int rightPad = 1;
+//const int leftPad = 0;
+//const int rightPad = 1;
 const int reedS1 = 2;
 const int reedS2 = 3;
 
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(leftPad, INPUT_PULLUP);
-  pinMode(rightPad, INPUT_PULLUP);
+//  pinMode(leftPad, INPUT_PULLUP);
+//  pinMode(rightPad, INPUT_PULLUP);
   pinMode(reedS1, INPUT_PULLUP);
   pinMode(reedS2, INPUT_PULLUP);
 }
@@ -25,8 +28,8 @@ void loop() {
   {
     int LDRvalue = analogRead(LDR);
     int thermoValue = analogRead(thermo);
-    int leftValue = !digitalRead(leftPad);
-    int rightValue = !digitalRead(rightPad);
+    int leftValue = touchRead(leftPad);
+    int rightValue = touchRead(rightPad);
     int reed1Value = !digitalRead(reedS1);
     int reed2Value = !digitalRead(reedS2);
     
@@ -36,6 +39,7 @@ void loop() {
     toSend += thermoValue;
     toSend += ",";
     toSend += leftValue;
+    toSend += ",";
     toSend += rightValue;
     toSend += ",";
     toSend += reed1Value;
