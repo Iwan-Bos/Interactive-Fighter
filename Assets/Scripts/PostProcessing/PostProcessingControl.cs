@@ -12,34 +12,44 @@ public class PostProcessingControl : MonoBehaviour
     public Volume volume;
     public Vignette vignette;
     public LiftGammaGain liftGammaGain;
+    public ChromaticAberration chromaticAberration;
 
     // bools
     bool darknessActive = false;
     bool coldnessActive = false;
     [SerializeField] bool flashlight = false;
+    [SerializeField] bool frostbite = false;
     
-    // 4 post-proccesing profiles:
+    // 4 dark post-proccesing profiles:
     // - nothing
     private float xDxF_vig = 0.2f;
     private float xDxF_gain = 0f;
-    [SerializeField] bool xDxF = true;
+    bool xDxF = true;
     // - both
     private float DF_vig = 0.5f;
     private float DF_gain = 0f;
-    [SerializeField] bool DF = false;
+    bool DF = false;
     // - dark no flash
     private float DxF_vig = 0.5f;
     private float DxF_gain = -0.98f;
-    [SerializeField] bool DxF = false;
+    bool DxF = false;
     // - no dark + flash
     private float xDF_vig = 0f;
     private float xDF_gain = 1f;
-    [SerializeField] bool xDF = false;
+    bool xDF = false;
+
+    // 2 cold post-proccesing profiles:
+    // - cold
+    private float cold_gain = 255f;
+    private float cold_crom = 1f;
+    // - no cold
+    private float xCold_gain, xCold_crom = 0f;
 
     [SerializeField] float slideDuration;
     
-    // timer
-    private float Timer = 0f;
+    // timers
+    private float timer = 0f;
+    [SerializeField] float timer2 = 0f;
     
 
 
@@ -53,6 +63,7 @@ public class PostProcessingControl : MonoBehaviour
     private void Update() 
     {
         DarkEffects();
+        ColdEffects();
     }
  
 
@@ -73,29 +84,29 @@ public class PostProcessingControl : MonoBehaviour
                 if (flashlight && !DF)
                 {
                     // only when xDF is active
-                    if (xDF && Timer < 1f)
+                    if (xDF && timer < 1f)
                     {
                         // slide from profile "xDF" to "DF"
-                        _v.intensity.value = Mathf.Lerp(xDF_vig, DF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDF_gain, DF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(xDF_vig, DF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDF_gain, DF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
 
                     // only when DxF is active
-                    if (DxF && Timer < 1f)
+                    if (DxF && timer < 1f)
                     {
                         // slide from profile "DxF" to "DF"
-                        _v.intensity.value = Mathf.Lerp(DxF_vig, DF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DxF_gain, DF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(DxF_vig, DF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DxF_gain, DF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
                     
                     // make profile active when it complete the slide
-                    if (Timer >= 1f) 
+                    if (timer >= 1f) 
                     {
                         xDxF = false;
                         DF = true; // Darkness, Flashlight
@@ -103,7 +114,7 @@ public class PostProcessingControl : MonoBehaviour
                         xDF = false;
 
                         // reset timer
-                        Timer = 0f;
+                        timer = 0f;
                     }
                 }
 
@@ -111,29 +122,29 @@ public class PostProcessingControl : MonoBehaviour
                 else if (!flashlight && !DxF)
                 {
                     // only when DF is active
-                    if (DF && Timer < 1f)
+                    if (DF && timer < 1f)
                     {
                         // slide from profile "DF" to "DxF"
-                        _v.intensity.value = Mathf.Lerp(DF_vig, DxF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DF_gain, DxF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(DF_vig, DxF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DF_gain, DxF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
                     
                     // only when xDxF is active
-                    if (xDxF && Timer < 1f)
+                    if (xDxF && timer < 1f)
                     {
                         // slide from profile "xDxF" to "DxF"
-                        _v.intensity.value = Mathf.Lerp(xDxF_vig, DxF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDxF_gain, DxF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(xDxF_vig, DxF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDxF_gain, DxF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
 
                     // make profile active when it complete the slide
-                    if (Timer >= 1f) 
+                    if (timer >= 1f) 
                     {
                         xDxF = false;
                         DF = false; 
@@ -141,7 +152,7 @@ public class PostProcessingControl : MonoBehaviour
                         xDF = false;
 
                         // reset timer
-                        Timer = 0f;
+                        timer = 0f;
                     }
                 }
             }
@@ -152,29 +163,29 @@ public class PostProcessingControl : MonoBehaviour
                 if (flashlight && !xDF)
                 {
                     // only when DF is active
-                    if (DF && Timer < 1f)
+                    if (DF && timer < 1f)
                     {
                         // slide from profile "DF" to "xDF"
-                        _v.intensity.value = Mathf.Lerp(DF_vig, xDF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DF_gain, xDF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(DF_vig, xDF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DF_gain, xDF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
 
                     // only when xDxF is active
-                    if (xDxF && Timer < 1f)
+                    if (xDxF && timer < 1f)
                     {
                         // slide from profile "xDxF" to "xDF"
-                        _v.intensity.value = Mathf.Lerp(xDxF_vig, xDF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDxF_gain, xDF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(xDxF_vig, xDF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDxF_gain, xDF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
                     
                     // make profile active when it complete the slide
-                    if (Timer >= 1f) 
+                    if (timer >= 1f) 
                     {
                         xDxF = false;
                         DF = false;
@@ -182,7 +193,7 @@ public class PostProcessingControl : MonoBehaviour
                         xDF = true; // no Darkness, Flashlight
 
                         // reset timer
-                        Timer = 0f;
+                        timer = 0f;
                     }
                 }
 
@@ -190,29 +201,29 @@ public class PostProcessingControl : MonoBehaviour
                 else if (!flashlight && !xDxF)
                 {
                     // only when xDF is active
-                    if (xDF && Timer < 1f)
+                    if (xDF && timer < 1f)
                     {
                         // slide from profile "xDF" to "xDxF"
-                        _v.intensity.value = Mathf.Lerp(xDF_vig, xDxF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDF_gain, xDxF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(xDF_vig, xDxF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDF_gain, xDxF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
                     
                     // only when DxF is active
-                    if (DxF && Timer < 1f)
+                    if (DxF && timer < 1f)
                     {
                         // slide from profile "DxF" to "xDxF"
-                        _v.intensity.value = Mathf.Lerp(DxF_vig, xDxF_vig, Timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DxF_gain, xDxF_gain, Timer));
+                        _v.intensity.value = Mathf.Lerp(DxF_vig, xDxF_vig, timer);
+                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DxF_gain, xDxF_gain, timer));
                         
                         // increment timer
-                        Timer += Time.deltaTime / slideDuration; 
+                        timer += Time.deltaTime / slideDuration; 
                     }
 
                     // make profile active when it complete the slide
-                    if (Timer >= 1f) 
+                    if (timer >= 1f) 
                     {
                         xDxF = true; // no Darkness, no Flashlight
                         DF = false; 
@@ -220,7 +231,7 @@ public class PostProcessingControl : MonoBehaviour
                         xDF = false;
 
                         // reset timer
-                        Timer = 0f;
+                        timer = 0f;
                     }
                 }
             }
@@ -228,8 +239,45 @@ public class PostProcessingControl : MonoBehaviour
     }
 
     // add & remove effects when stepping in and out of coldness trigger
-    public void ColdEffects() {
+    public void ColdEffects() 
+    {  
+        // getting the post-proccesing profile's overrides we need (if it cannot find them it will ignore them without throwing an error)
+        if (volume.profile.TryGet<ChromaticAberration>(out ChromaticAberration _chrom) && 
+            volume.profile.TryGet<LiftGammaGain>(out LiftGammaGain _lgg))
+        {
+            // cold
+            if (coldnessActive)
+            {
+                if (timer2 < 1f)
+                {
+                    // slide from profile "xCold" to "Cold"
+                    _chrom.intensity.value = Mathf.Lerp(xCold_crom, cold_crom, timer2);
+                    _lgg.gain.value = new Vector4(0f, 0f, Mathf.Lerp(xCold_gain, cold_gain, timer2));
 
+                    // increment timer
+                    timer2 += Time.deltaTime / slideDuration;
+                
+                    // frostbite
+                    frostbite = true;
+                }
+            }
+            // no cold
+            else if (!coldnessActive)
+            {
+                if (timer2 > 0f)
+                {
+                    // slide from profile "xCold" to "Cold"
+                    _chrom.intensity.value = Mathf.Lerp(xCold_crom, cold_crom, timer2);
+                    _lgg.gain.value = new Vector4(0f, 0f, Mathf.Lerp(xCold_gain, cold_gain, timer2));
+
+                    // increment timer
+                    timer2 -= Time.deltaTime / slideDuration;
+
+                    // no frostbite
+                    frostbite = false;
+                }
+            }
+        }
     }
 
     // these Methods can most likely be removed
