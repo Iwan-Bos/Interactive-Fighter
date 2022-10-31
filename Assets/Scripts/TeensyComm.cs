@@ -133,6 +133,7 @@ public class TeensyComm : MonoBehaviour
                 {
                     serial.Open();
                     serial.ReadTimeout = timeout;
+                    FindObjectOfType<PlayerMovement>().teensy = true;
                     //print("Port Opened!");
                     isPortActive = true;
                 }
@@ -144,6 +145,7 @@ public class TeensyComm : MonoBehaviour
         }
         catch
         {
+            FindObjectOfType<PlayerMovement>().teensy = false;
             print("port does not exist");
         }
     }

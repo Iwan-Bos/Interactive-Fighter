@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Rigidbody rb;
     [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask groundLayer;
+    public bool teensy;
  
 
     // Stats
@@ -30,10 +31,16 @@ public class PlayerMovement : MonoBehaviour
     // loop for misc
     void Update()
     {
-        // horizontal = Input.GetAxisRaw("Horizontal"); // movement for keyboard
-        // Debug.Log(horizontal);
+        if (!teensy)
+        {
+            horizontal = Input.GetAxisRaw("Horizontal"); // movement for keyboard
+            // Debug.Log(horizontal);
 
-        // Jump();
+            if (Input.GetKeyDown("space"))
+            {
+                Jump();
+            }
+        }
 
         // BasicAttack();
 
@@ -199,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
     // checks if player is on the ground
     private bool Grounded()
     {
-        return Physics.CheckSphere(groundCheck.position, 0.2f, groundLayer);
+        return Physics.CheckSphere(groundCheck.position, 0.3f, groundLayer);
     }
     // flips character around based on direction held
     private void Flip()
