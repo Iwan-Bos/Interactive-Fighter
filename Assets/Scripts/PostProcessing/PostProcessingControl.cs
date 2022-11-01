@@ -30,7 +30,7 @@ public class PostProcessingControl : MonoBehaviour
     private float DF_gain = 0f;
     bool DF = false;
     // - dark no flash
-    private float DxF_vig = 0.5f;
+    private float DxF_vig = 1f;
     private float DxF_gain = -0.98f;
     bool DxF = false;
     // - no dark + flash
@@ -40,8 +40,8 @@ public class PostProcessingControl : MonoBehaviour
 
     // 2 cold post-proccesing profiles:
     // - cold
-    private float cold_gain = 255f;
-    private float cold_crom = 1f;
+    private float cold_gain = 1f;
+    private float cold_crom = .6f;
     // - no cold
     private float xCold_gain, xCold_crom = 0f;
 
@@ -88,7 +88,7 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "xDF" to "DF"
                         _v.intensity.value = Mathf.Lerp(xDF_vig, DF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDF_gain, DF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(xDF_gain, DF_gain, timer));
                         
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
@@ -99,7 +99,7 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "DxF" to "DF"
                         _v.intensity.value = Mathf.Lerp(DxF_vig, DF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DxF_gain, DF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(DxF_gain, DF_gain, timer));
                         
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
@@ -126,7 +126,7 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "DF" to "DxF"
                         _v.intensity.value = Mathf.Lerp(DF_vig, DxF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DF_gain, DxF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(DF_gain, DxF_gain, timer));
                         
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
@@ -137,7 +137,7 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "xDxF" to "DxF"
                         _v.intensity.value = Mathf.Lerp(xDxF_vig, DxF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDxF_gain, DxF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(xDxF_gain, DxF_gain, timer));
                         
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
@@ -167,8 +167,13 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "DF" to "xDF"
                         _v.intensity.value = Mathf.Lerp(DF_vig, xDF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DF_gain, xDF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(DF_gain, xDF_gain, timer));
                         
+                        // 
+                        // LIFT
+                        // GOES
+                        // HERE
+
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
                     }
@@ -178,7 +183,7 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "xDxF" to "xDF"
                         _v.intensity.value = Mathf.Lerp(xDxF_vig, xDF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDxF_gain, xDF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(xDxF_gain, xDF_gain, timer));
                         
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
@@ -205,7 +210,7 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "xDF" to "xDxF"
                         _v.intensity.value = Mathf.Lerp(xDF_vig, xDxF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(xDF_gain, xDxF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(xDF_gain, xDxF_gain, timer));
                         
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
@@ -216,7 +221,7 @@ public class PostProcessingControl : MonoBehaviour
                     {
                         // slide from profile "DxF" to "xDxF"
                         _v.intensity.value = Mathf.Lerp(DxF_vig, xDxF_vig, timer);
-                        _lgg.gain.value = new Vector4(0f, 0f, 0f, Mathf.Lerp(DxF_gain, xDxF_gain, timer));
+                        _lgg.gain.value = new Vector4(_lgg.gain.value.x, _lgg.gain.value.y, _lgg.gain.value.z, Mathf.Lerp(DxF_gain, xDxF_gain, timer));
                         
                         // increment timer
                         timer += Time.deltaTime / slideDuration; 
@@ -252,7 +257,7 @@ public class PostProcessingControl : MonoBehaviour
                 {
                     // slide from profile "xCold" to "Cold"
                     _chrom.intensity.value = Mathf.Lerp(xCold_crom, cold_crom, timer2);
-                    _lgg.gain.value = new Vector4(0f, 0f, Mathf.Lerp(xCold_gain, cold_gain, timer2));
+                    _lgg.gain.value = new Vector4(0f, 0f, Mathf.Lerp(xCold_gain, cold_gain, timer2), _lgg.gain.value.w);
 
                     // increment timer
                     timer2 += Time.deltaTime / slideDuration;
@@ -268,7 +273,7 @@ public class PostProcessingControl : MonoBehaviour
                 {
                     // slide from profile "xCold" to "Cold"
                     _chrom.intensity.value = Mathf.Lerp(xCold_crom, cold_crom, timer2);
-                    _lgg.gain.value = new Vector4(0f, 0f, Mathf.Lerp(xCold_gain, cold_gain, timer2));
+                    _lgg.gain.value = new Vector4(0f, 0f, Mathf.Lerp(xCold_gain, cold_gain, timer2), _lgg.gain.value.w);
 
                     // increment timer
                     timer2 -= Time.deltaTime / slideDuration;
@@ -276,6 +281,11 @@ public class PostProcessingControl : MonoBehaviour
                     // no frostbite
                     frostbite = false;
                 }
+                /*
+                if (timer2 >= 1f)
+                {
+                    _lgg.gain.value =  new Vector4(0f, 0f, 0f);
+                }*/
             }
         }
     }
