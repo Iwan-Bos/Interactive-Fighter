@@ -1104,7 +1104,6 @@ MonoBehaviour:
   flashlight: 0
   frostbite: 0
   slideDuration: 1
-  timer2: 0
 --- !u!1 &1264148975
 GameObject:
   m_ObjectHideFlags: 0
